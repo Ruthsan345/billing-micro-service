@@ -10,11 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import com.example.billingservice.controller.MailingController;
+
+@Service
 public class kafkaListeners {
 
-
-    @Service
-    public class KafkaListeners {
         @Autowired
         ObjectMapper objectMapper;
 
@@ -28,12 +27,13 @@ public class kafkaListeners {
                 bill = objectMapper.readValue(consumerRecord.value(), new TypeReference<Bill>() {
                 });
                 billOp.generatePDFBill(bill);
+                System.out.print("\n\n--------------------->"+bill.getBillAmount()+" "+bill.getClientName()+" "+bill.getGrandBillAmount());
+
 
             }catch(Exception e){
                 System.out.print(e);
             }
-            System.out.print("\n\n--------------------->"+bill.getBillAmount()+" "+bill.getClientName()+" "+bill.getGrandBillAmount());
         }
-    }
+
 
 }

@@ -3,6 +3,7 @@ import com.example.billingservice.model.Bill;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import com.itextpdf.text.pdf.PdfWriter;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -14,13 +15,14 @@ public class PdfGenerator {
         try {
             Document my_pdf_report = new Document();
 
-            UUID randomUUID = UUID.randomUUID();
-            String filename= bill.getClientId() + "_" + randomUUID.toString().replaceAll("_", "") + ".pdf";
+
+            String billid = bill.getClientId() + "_" +RandomStringUtils.randomAlphanumeric(10)+".pdf";
+
 
             if (bill.isWholesalerOrRetailer()) {
-                PdfWriter.getInstance(my_pdf_report, new FileOutputStream("./wholesaler_purchase_pdfs/" +filename));
+                PdfWriter.getInstance(my_pdf_report, new FileOutputStream("./wholesaler_purchase_pdfs/" +billid));
             } else {
-                PdfWriter.getInstance(my_pdf_report, new FileOutputStream("./retailer_purchase_pdfs/" + filename));
+                PdfWriter.getInstance(my_pdf_report, new FileOutputStream("./retailer_purchase_pdfs/" + billid));
             }
             my_pdf_report.open();
             PdfPTable my_report_table = new PdfPTable(2);
@@ -122,7 +124,8 @@ public class PdfGenerator {
             my_pdf_report.add(preface3);
             my_pdf_report.add(preface2);
             my_pdf_report.close();
-            return filename;
+            System.out.print("----------------------->");
+            return billid;
 
         } catch (DocumentException e) {
             e.printStackTrace();

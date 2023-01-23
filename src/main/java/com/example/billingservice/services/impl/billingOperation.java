@@ -45,7 +45,8 @@ public class billingOperation implements Billing {
     @Override
     public ResponseEntity<String> sendInvoiceMail(String invoiceId, String mailId, Boolean isWholesaler ) {
         try {
-
+            System.out.print(invoiceId);
+            Thread.sleep(5000);
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
             MimeMessageHelper mimeMessageHelper;
@@ -65,6 +66,7 @@ public class billingOperation implements Billing {
             mimeMessageHelper.addAttachment(file.getFilename(), file);
 
             javaMailSender.send(mimeMessage);
+            System.out.print("mail Function invoked");
             return new ResponseEntity<>("Mail sent successfully", HttpStatus.OK);
         }
 
